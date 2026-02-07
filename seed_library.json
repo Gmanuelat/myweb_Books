@@ -1,0 +1,230 @@
+{
+  "library": {
+    "name": "Seed Library",
+    "description": "Initial collection of 20 public domain books",
+    "created": "2026-02-07",
+    "source": "Project Gutenberg"
+  },
+  "books": [
+    {
+      "id": 1,
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "language": "English",
+      "year": 1813,
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Elizabeth Bennet navigates society, family pressures, and her complicated feelings for the proud Mr. Darcy in Regency England."
+    },
+    {
+      "id": 2,
+      "title": "Moby-Dick; Or, The Whale",
+      "author": "Herman Melville",
+      "language": "English",
+      "year": 1851,
+      "source_url": "https://www.gutenberg.org/ebooks/2701",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Sailor Ishmael narrates Captain Ahab's obsessive quest to hunt down Moby Dick, a giant white sperm whale."
+    },
+    {
+      "id": 3,
+      "title": "Frankenstein",
+      "author": "Mary Shelley",
+      "language": "English",
+      "year": 1818,
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "A young scientist creates a living creature from dead body parts, leading to tragic consequences for both creator and creation."
+    },
+    {
+      "id": 4,
+      "title": "Dracula",
+      "author": "Bram Stoker",
+      "language": "English",
+      "year": 1897,
+      "source_url": "https://www.gutenberg.org/ebooks/345",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Count Dracula travels from Transylvania to England, and a group led by Professor Van Helsing must stop his reign of terror."
+    },
+    {
+      "id": 5,
+      "title": "The Adventures of Sherlock Holmes",
+      "author": "Arthur Conan Doyle",
+      "language": "English",
+      "year": 1892,
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Twelve short stories featuring the brilliant detective Sherlock Holmes and his companion Dr. Watson solving mysteries in Victorian London."
+    },
+    {
+      "id": 6,
+      "title": "Alice's Adventures in Wonderland",
+      "author": "Lewis Carroll",
+      "language": "English",
+      "year": 1865,
+      "source_url": "https://www.gutenberg.org/ebooks/11",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Young Alice falls down a rabbit hole into a fantastical world filled with peculiar creatures and nonsensical adventures."
+    },
+    {
+      "id": 7,
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "language": "English",
+      "year": 1925,
+      "source_url": "https://www.gutenberg.org/ebooks/64317",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Nick Carraway narrates the story of mysterious millionaire Jay Gatsby and his obsession with the beautiful Daisy Buchanan in 1920s New York."
+    },
+    {
+      "id": 8,
+      "title": "The Picture of Dorian Gray",
+      "author": "Oscar Wilde",
+      "language": "English",
+      "year": 1890,
+      "source_url": "https://www.gutenberg.org/ebooks/174",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "A young man wishes his portrait would age instead of himself, allowing him to pursue a life of pleasure while remaining eternally youthful."
+    },
+    {
+      "id": 9,
+      "title": "A Tale of Two Cities",
+      "author": "Charles Dickens",
+      "language": "English",
+      "year": 1859,
+      "source_url": "https://www.gutenberg.org/ebooks/98",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Set during the French Revolution, the novel follows characters in London and Paris whose lives become intertwined through love, sacrifice, and redemption."
+    },
+    {
+      "id": 10,
+      "title": "Jane Eyre",
+      "author": "Charlotte Bronte",
+      "language": "English",
+      "year": 1847,
+      "source_url": "https://www.gutenberg.org/ebooks/1260",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "An orphaned governess falls in love with her mysterious employer Mr. Rochester, but dark secrets threaten their happiness."
+    },
+    {
+      "id": 11,
+      "title": "Wuthering Heights",
+      "author": "Emily Bronte",
+      "language": "English",
+      "year": 1847,
+      "source_url": "https://www.gutenberg.org/ebooks/768",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "A tale of passionate and destructive love between Heathcliff and Catherine on the Yorkshire moors, spanning two generations."
+    },
+    {
+      "id": 12,
+      "title": "Crime and Punishment",
+      "author": "Fyodor Dostoevsky",
+      "language": "English",
+      "year": 1866,
+      "source_url": "https://www.gutenberg.org/ebooks/2554",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "A poor student in St. Petersburg commits murder and struggles with guilt and paranoia while a detective closes in."
+    },
+    {
+      "id": 13,
+      "title": "The Adventures of Tom Sawyer",
+      "author": "Mark Twain",
+      "language": "English",
+      "year": 1876,
+      "source_url": "https://www.gutenberg.org/ebooks/74",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "A mischievous boy growing up along the Mississippi River gets into adventures involving treasure, pirates, and a murder mystery."
+    },
+    {
+      "id": 14,
+      "title": "Adventures of Huckleberry Finn",
+      "author": "Mark Twain",
+      "language": "English",
+      "year": 1884,
+      "source_url": "https://www.gutenberg.org/ebooks/76",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Huck Finn escapes his abusive father and travels down the Mississippi River with Jim, an escaped slave seeking freedom."
+    },
+    {
+      "id": 15,
+      "title": "War and Peace",
+      "author": "Leo Tolstoy",
+      "language": "English",
+      "year": 1869,
+      "source_url": "https://www.gutenberg.org/ebooks/2600",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "An epic novel following Russian aristocratic families during the Napoleonic Wars, exploring love, war, and the meaning of history."
+    },
+    {
+      "id": 16,
+      "title": "The Count of Monte Cristo",
+      "author": "Alexandre Dumas",
+      "language": "English",
+      "year": 1844,
+      "source_url": "https://www.gutenberg.org/ebooks/1184",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Wrongfully imprisoned sailor Edmond Dantes escapes, discovers a vast treasure, and returns to Paris to exact revenge on those who betrayed him."
+    },
+    {
+      "id": 17,
+      "title": "The Wonderful Wizard of Oz",
+      "author": "L. Frank Baum",
+      "language": "English",
+      "year": 1900,
+      "source_url": "https://www.gutenberg.org/ebooks/55",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Dorothy and her dog Toto are swept from Kansas to Oz, where they join a Scarecrow, Tin Woodman, and Cowardly Lion on a journey to the Emerald City."
+    },
+    {
+      "id": 18,
+      "title": "Treasure Island",
+      "author": "Robert Louis Stevenson",
+      "language": "English",
+      "year": 1883,
+      "source_url": "https://www.gutenberg.org/ebooks/120",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Young Jim Hawkins discovers a pirate treasure map and embarks on a sea voyage filled with mutiny and adventure."
+    },
+    {
+      "id": 19,
+      "title": "The Strange Case of Dr. Jekyll and Mr. Hyde",
+      "author": "Robert Louis Stevenson",
+      "language": "English",
+      "year": 1886,
+      "source_url": "https://www.gutenberg.org/ebooks/43",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "A London lawyer investigates the connection between the respectable Dr. Jekyll and the evil Mr. Hyde, uncovering a disturbing secret."
+    },
+    {
+      "id": 20,
+      "title": "Little Women",
+      "author": "Louisa May Alcott",
+      "language": "English",
+      "year": 1868,
+      "source_url": "https://www.gutenberg.org/ebooks/514",
+      "license": "Public Domain",
+      "formats": ["TXT", "HTML", "EPUB", "Kindle"],
+      "description": "Four sisters grow up during the Civil War era, facing hardships, romance, and personal growth as they transition into adulthood."
+    }
+  ]
+}
