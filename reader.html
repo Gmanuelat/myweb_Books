@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Reading - MyWeb Books</title>
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0a1733;
+            color: #fff;
+        }
+
+        /* ========== TOOLBAR ========== */
+        .reader-toolbar {
+            height: 60px;
+            background: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            border-bottom: 1px solid #1a2744;
+            position: relative;
+            z-index: 100;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .toolbar-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-link {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #ff6b6b;
+        }
+
+        .book-title {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .toolbar-btn {
+            background: #1a2744;
+            color: #fff;
+            border: 1px solid #2a3a5c;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .toolbar-btn:hover {
+            background: #2a3a5c;
+            border-color: #3a4a6c;
+        }
+
+        .toolbar-btn:active {
+            transform: scale(0.95);
+        }
+
+        .toolbar-btn.nav-btn {
+            background: #e94560;
+            border-color: #e94560;
+            width: auto;
+            padding: 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .toolbar-btn.nav-btn:hover {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        .toolbar-btn:disabled {
+            background: #1a1a2e;
+            border-color: #2a2a3e;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        .page-indicator {
+            color: #8892b0;
+            font-size: 0.85rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .zoom-label {
+            color: #8892b0;
+            font-size: 0.8rem;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        /* ========== READER CONTAINER ========== */
+        .reader-container {
+            height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        .page-wrapper {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 100%;
+            position: relative;
+        }
+
+        /* Fit mode: image fills container while maintaining aspect ratio */
+        .page-wrapper.fit-mode {
+            width: auto;
+            height: calc(100vh - 60px - 2rem);
+        }
+
+        .page-wrapper.fit-mode .page-image {
+            max-width: calc(100vw - 2rem);
+            max-height: calc(100vh - 60px - 2rem);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Zoom mode: image scales based on zoom level */
+        .page-wrapper.zoom-mode {
+            overflow: auto;
+            width: calc(100vw - 2rem);
+            height: calc(100vh - 60px - 2rem);
+        }
+
+        .page-wrapper.zoom-mode .page-image {
+            max-width: none;
+            max-height: none;
+            transform-origin: center center;
+        }
+
+        .page-image {
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        /* ========== LOADING & ERROR STATES ========== */
+        .loading-state,
+        .error-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 60px);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #1a2744;
+            border-top-color: #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-state p {
+            color: #8892b0;
+            font-size: 1rem;
+        }
+
+        .error-state h2 {
+            color: #e94560;
+            margin-bottom: 1rem;
+        }
+
+        .error-state p {
+            color: #8892b0;
+            margin-bottom: 1.5rem;
+        }
+
+        .error-state a {
+            color: #e94560;
+            text-decoration: none;
+        }
+
+        .error-state a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========== MOBILE RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .reader-toolbar {
+                height: 50px;
+                padding: 0 0.5rem;
+            }
+
+            .toolbar-center {
+                position: static;
+                transform: none;
+            }
+
+            .book-title {
+                display: none;
+            }
+
+            .toolbar-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .toolbar-btn.nav-btn {
+                padding: 0 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .page-indicator {
+                font-size: 0.75rem;
+                min-width: 60px;
+            }
+
+            .zoom-label {
+                display: none;
+            }
+
+            .reader-container {
+                height: calc(100vh - 50px);
+                padding: 0.5rem;
+            }
+
+            .page-wrapper.fit-mode {
+                height: calc(100vh - 50px - 1rem);
+            }
+
+            .page-wrapper.fit-mode .page-image {
+                max-width: calc(100vw - 1rem);
+                max-height: calc(100vh - 50px - 1rem);
+            }
+
+            .page-wrapper.zoom-mode {
+                width: calc(100vw - 1rem);
+                height: calc(100vh - 50px - 1rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .back-link span {
+                display: none;
+            }
+
+            .toolbar-right {
+                gap: 0.25rem;
+            }
+
+            .toolbar-btn {
+                width: 32px;
+                height: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toolbar -->
+    <nav class="reader-toolbar">
+        <div class="toolbar-left">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                <span>Back to Library</span>
+            </a>
+            <span class="book-title" id="book-title">Loading...</span>
+        </div>
+
+        <div class="toolbar-center">
+            <button class="toolbar-btn nav-btn" id="prev-btn" title="Previous Page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </button>
+            <span class="page-indicator" id="page-indicator">- / -</span>
+            <button class="toolbar-btn nav-btn" id="next-btn" title="Next Page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="toolbar-right">
+            <button class="toolbar-btn" id="zoom-out-btn" title="Zoom Out">−</button>
+            <span class="zoom-label" id="zoom-label">Fit</span>
+            <button class="toolbar-btn" id="zoom-in-btn" title="Zoom In">+</button>
+            <button class="toolbar-btn" id="fit-btn" title="Fit to Screen">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Reader Content -->
+    <main class="reader-container" id="reader-container">
+        <div class="loading-state" id="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading book...</p>
+        </div>
+    </main>
+
+    <script>
+        // ========== READER STATE ==========
+        const ReaderState = {
+            bookSlug: '',
+            bookTitle: '',
+            currentPage: 1,
+            totalPages: 0,
+            zoomLevel: 1,
+            minZoom: 0.5,
+            maxZoom: 3,
+            zoomStep: 0.25,
+            isFitMode: true,
+            pageImages: []
+        };
+
+        // ========== DOM ELEMENTS ==========
+        const elements = {
+            container: document.getElementById('reader-container'),
+            loadingState: document.getElementById('loading-state'),
+            bookTitle: document.getElementById('book-title'),
+            pageIndicator: document.getElementById('page-indicator'),
+            zoomLabel: document.getElementById('zoom-label'),
+            prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            zoomInBtn: document.getElementById('zoom-in-btn'),
+            zoomOutBtn: document.getElementById('zoom-out-btn'),
+            fitBtn: document.getElementById('fit-btn')
+        };
+
+        // ========== INITIALIZATION ==========
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            ReaderState.bookSlug = params.get('book') || '';
+            ReaderState.bookTitle = params.get('title') || 'Book';
+            ReaderState.totalPages = parseInt(params.get('pages')) || 0;
+
+            // Update document title
+            document.title = `${ReaderState.bookTitle} - MyWeb Books`;
+            elements.bookTitle.textContent = ReaderState.bookTitle;
+
+            if (!ReaderState.bookSlug) {
+                showError('No book selected', 'Please go back to the library and select a book to read.');
+                return;
+            }
+
+            // Setup event listeners
+            setupEventListeners();
+
+            // Load the book
+            loadBook();
+        }
+
+        // ========== BOOK LOADING ==========
+        async function loadBook() {
+            try {
+                // If total pages provided in URL, use that
+                if (ReaderState.totalPages > 0) {
+                    displayPage(1);
+                    return;
+                }
+
+                // Otherwise, try to detect pages by loading them
+                await detectPages();
+
+                if (ReaderState.totalPages === 0) {
+                    showError('No pages found', `Could not find any pages for "${ReaderState.bookTitle}".`);
+                    return;
+                }
+
+                displayPage(1);
+            } catch (error) {
+                showError('Error loading book', error.message);
+            }
+        }
+
+        async function detectPages() {
+            // Try to load pages until one fails
+            let pageNum = 1;
+            const maxAttempts = 500; // Safety limit
+
+            while (pageNum <= maxAttempts) {
+                const exists = await checkPageExists(pageNum);
+                if (!exists) break;
+                ReaderState.totalPages = pageNum;
+                pageNum++;
+            }
+        }
+
+        function checkPageExists(pageNum) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = getPagePath(pageNum);
+            });
+        }
+
+        function getPagePath(pageNum) {
+            // Support multiple formats - try png first, then jpg
+            return `books/${ReaderState.bookSlug}/page-${pageNum}.png`;
+        }
+
+        // ========== PAGE DISPLAY ==========
+        function displayPage(pageNum) {
+            if (pageNum < 1 || (ReaderState.totalPages > 0 && pageNum > ReaderState.totalPages)) {
+                return;
+            }
+
+            ReaderState.currentPage = pageNum;
+            updatePageIndicator();
+            updateNavigationButtons();
+
+            // Create page wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = `page-wrapper ${ReaderState.isFitMode ? 'fit-mode' : 'zoom-mode'}`;
+            wrapper.id = 'page-wrapper';
+
+            // Create image
+            const img = document.createElement('img');
+            img.className = 'page-image';
+            img.id = 'page-image';
+            img.alt = `Page ${pageNum} of ${ReaderState.bookTitle}`;
+            img.draggable = false;
+
+            // Handle load success
+            img.onload = () => {
+                elements.loadingState?.remove();
+                if (!ReaderState.isFitMode) {
+                    applyZoom();
+                }
+            };
+
+            // Handle load error - try jpg if png fails
+            img.onerror = () => {
+                const jpgPath = `books/${ReaderState.bookSlug}/page-${pageNum}.jpg`;
+                if (!img.src.includes('.jpg')) {
+                    img.src = jpgPath;
+                } else {
+                    showError('Page not found', `Could not load page ${pageNum}.`);
+                }
+            };
+
+            img.src = getPagePath(pageNum);
+            wrapper.appendChild(img);
+
+            // Replace content
+            const existingWrapper = document.getElementById('page-wrapper');
+            if (existingWrapper) {
+                existingWrapper.replaceWith(wrapper);
+            } else {
+                elements.container.appendChild(wrapper);
+            }
+
+            // Save reading progress
+            saveProgress();
+        }
+
+        // ========== NAVIGATION ==========
+        function goToPrevPage() {
+            if (ReaderState.currentPage > 1) {
+                displayPage(ReaderState.currentPage - 1);
+            }
+        }
+
+        function goToNextPage() {
+            if (ReaderState.totalPages === 0 || ReaderState.currentPage < ReaderState.totalPages) {
+                displayPage(ReaderState.currentPage + 1);
+            }
+        }
+
+        function updateNavigationButtons() {
+            elements.prevBtn.disabled = ReaderState.currentPage <= 1;
+            elements.nextBtn.disabled = ReaderState.totalPages > 0 && ReaderState.currentPage >= ReaderState.totalPages;
+        }
+
+        function updatePageIndicator() {
+            const total = ReaderState.totalPages > 0 ? ReaderState.totalPages : '?';
+            elements.pageIndicator.textContent = `${ReaderState.currentPage} / ${total}`;
+        }
+
+        // ========== ZOOM CONTROLS ==========
+        function zoomIn() {
+            if (ReaderState.zoomLevel < ReaderState.maxZoom) {
+                ReaderState.isFitMode = false;
+                ReaderState.zoomLevel = Math.min(ReaderState.maxZoom, ReaderState.zoomLevel + ReaderState.zoomStep);
+                applyZoom();
+            }
+        }
+
+        function zoomOut() {
+            if (ReaderState.zoomLevel > ReaderState.minZoom) {
+                ReaderState.isFitMode = false;
+                ReaderState.zoomLevel = Math.max(ReaderState.minZoom, ReaderState.zoomLevel - ReaderState.zoomStep);
+                applyZoom();
+            }
+        }
+
+        function fitToScreen() {
+            ReaderState.isFitMode = true;
+            ReaderState.zoomLevel = 1;
+
+            const wrapper = document.getElementById('page-wrapper');
+            const img = document.getElementById('page-image');
+
+            if (wrapper && img) {
+                wrapper.className = 'page-wrapper fit-mode';
+                img.style.transform = '';
+                img.style.width = '';
+                img.style.height = '';
+            }
+
+            updateZoomLabel();
+        }
+
+        function applyZoom() {
+            const wrapper = document.getElementById('page-wrapper');
+            const img = document.getElementById('page-image');
+
+            if (!wrapper || !img) return;
+
+            wrapper.className = 'page-wrapper zoom-mode';
+
+            // Apply zoom as percentage of natural size
+            const zoomPercent = ReaderState.zoomLevel * 100;
+            img.style.width = `${zoomPercent}%`;
+            img.style.height = 'auto';
+            img.style.transform = '';
+
+            updateZoomLabel();
+        }
+
+        function updateZoomLabel() {
+            if (ReaderState.isFitMode) {
+                elements.zoomLabel.textContent = 'Fit';
+            } else {
+                elements.zoomLabel.textContent = `${Math.round(ReaderState.zoomLevel * 100)}%`;
+            }
+        }
+
+        // ========== PROGRESS SAVING ==========
+        function saveProgress() {
+            try {
+                const progress = JSON.parse(localStorage.getItem('myweb_reading_progress') || '{}');
+                progress[ReaderState.bookSlug] = {
+                    page: ReaderState.currentPage,
+                    totalPages: ReaderState.totalPages,
+                    lastRead: Date.now()
+                };
+                localStorage.setItem('myweb_reading_progress', JSON.stringify(progress));
+            } catch (e) {
+                console.warn('Could not save reading progress:', e);
+            }
+        }
+
+        function loadProgress() {
+            try {
+                const progress = JSON.parse(localStorage.getItem('myweb_reading_progress') || '{}');
+                return progress[ReaderState.bookSlug]?.page || 1;
+            } catch (e) {
+                return 1;
+            }
+        }
+
+        // ========== ERROR HANDLING ==========
+        function showError(title, message) {
+            elements.loadingState?.remove();
+            document.getElementById('page-wrapper')?.remove();
+
+            const errorHtml = `
+                <div class="error-state">
+                    <h2>${title}</h2>
+                    <p>${message}</p>
+                    <a href="index.html">← Return to Library</a>
+                </div>
+            `;
+            elements.container.innerHTML = errorHtml;
+        }
+
+        // ========== EVENT LISTENERS ==========
+        function setupEventListeners() {
+            // Navigation buttons
+            elements.prevBtn.addEventListener('click', goToPrevPage);
+            elements.nextBtn.addEventListener('click', goToNextPage);
+
+            // Zoom buttons
+            elements.zoomInBtn.addEventListener('click', zoomIn);
+            elements.zoomOutBtn.addEventListener('click', zoomOut);
+            elements.fitBtn.addEventListener('click', fitToScreen);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT') return;
+
+                switch (e.key) {
+                    case 'ArrowLeft':
+                    case 'PageUp':
+                        e.preventDefault();
+                        goToPrevPage();
+                        break;
+                    case 'ArrowRight':
+                    case 'PageDown':
+                    case ' ':
+                        e.preventDefault();
+                        goToNextPage();
+                        break;
+                    case '+':
+                    case '=':
+                        e.preventDefault();
+                        zoomIn();
+                        break;
+                    case '-':
+                    case '_':
+                        e.preventDefault();
+                        zoomOut();
+                        break;
+                    case '0':
+                        e.preventDefault();
+                        fitToScreen();
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        displayPage(1);
+                        break;
+                    case 'End':
+                        if (ReaderState.totalPages > 0) {
+                            e.preventDefault();
+                            displayPage(ReaderState.totalPages);
+                        }
+                        break;
+                }
+            });
+
+            // Touch swipe for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            elements.container.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            elements.container.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        goToNextPage(); // Swipe left = next
+                    } else {
+                        goToPrevPage(); // Swipe right = prev
+                    }
+                }
+            }
+
+            // Double-click to toggle fit/zoom
+            elements.container.addEventListener('dblclick', () => {
+                if (ReaderState.isFitMode) {
+                    ReaderState.zoomLevel = 1.5;
+                    ReaderState.isFitMode = false;
+                    applyZoom();
+                } else {
+                    fitToScreen();
+                }
+            });
+        }
+
+        // Initialize reader
+        init();
+    </script>
+</body>
+</html>
