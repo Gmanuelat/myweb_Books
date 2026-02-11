@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Books - MyWeb Books</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/fonts.css">
     <style>
         /* My Books Page Specific Styles */
         .my-books-header {
@@ -21,6 +23,35 @@
 
         .my-books-header p {
             color: #8892b0;
+        }
+
+        .login-required {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .login-required h2 {
+            margin-bottom: 1rem;
+        }
+
+        .login-required p {
+            color: #8892b0;
+            margin-bottom: 2rem;
+        }
+
+        .login-required .btn-login-big {
+            display: inline-block;
+            background: #e94560;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .login-required .btn-login-big:hover {
+            background: #ff6b6b;
         }
 
         .stats-bar {
@@ -139,6 +170,7 @@
             margin-bottom: 2rem;
             border-bottom: 1px solid #1a2744;
             padding-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
@@ -190,131 +222,161 @@
             text-decoration: underline;
         }
 
-        .favorites-grid {
+        .books-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
         }
 
-        .favorite-card {
+        .book-list-item {
+            display: flex;
+            gap: 1rem;
             background: #0f1942;
-            border-radius: 12px;
             padding: 1rem;
+            border-radius: 12px;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .favorite-card:hover {
-            transform: translateY(-4px);
+        .book-list-item:hover {
+            transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
 
-        .favorite-cover {
-            aspect-ratio: 2/3;
+        .book-list-cover {
+            width: 80px;
+            height: 120px;
             border-radius: 6px;
-            margin-bottom: 0.75rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 1rem 0.5rem;
+            padding: 0.5rem;
+            flex-shrink: 0;
         }
 
-        .favorite-cover .book-year {
-            font-size: 0.7rem;
-            opacity: 0.7;
+        .book-list-cover h4 {
+            font-size: 0.65rem;
+            line-height: 1.2;
             margin-bottom: 0.25rem;
         }
 
-        .favorite-cover h4 {
-            font-size: 0.8rem;
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 0.25rem;
-        }
-
-        .favorite-cover .book-author {
-            font-size: 0.7rem;
+        .book-list-cover .book-author {
+            font-size: 0.55rem;
             opacity: 0.8;
-            font-style: italic;
         }
 
-        .favorite-actions {
+        .book-list-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .book-list-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .book-list-info .author {
+            color: #8892b0;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-list-info .progress-info {
+            font-size: 0.8rem;
+            color: #e94560;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-list-info .date-info {
+            font-size: 0.75rem;
+            color: #8892b0;
+        }
+
+        .book-list-actions {
             display: flex;
             gap: 0.5rem;
+            margin-top: 0.5rem;
         }
 
-        .favorite-actions button,
-        .favorite-actions a {
-            flex: 1;
-            padding: 0.5rem;
+        .book-list-actions a,
+        .book-list-actions button {
+            padding: 0.5rem 1rem;
             border-radius: 4px;
             font-size: 0.8rem;
             font-weight: 500;
-            text-align: center;
             text-decoration: none;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .btn-read-fav {
+        .btn-continue {
             background: #e94560;
             color: #fff;
             border: none;
         }
 
-        .btn-read-fav:hover {
+        .btn-continue:hover {
             background: #ff6b6b;
         }
 
-        .btn-remove-fav {
+        .btn-remove {
             background: none;
             border: 1px solid #3a4a6c;
             color: #8892b0;
         }
 
-        .btn-remove-fav:hover {
+        .btn-remove:hover {
             border-color: #e94560;
             color: #e94560;
         }
 
-        .recently-read-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .recent-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: #0f1942;
-            padding: 1rem;
-            border-radius: 8px;
-            transition: background 0.2s;
+        .status-badge.reading {
+            background: rgba(233, 69, 96, 0.2);
+            color: #e94560;
         }
 
-        .recent-item:hover {
-            background: #1a2744;
+        .status-badge.finished {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
         }
 
-        .recent-info {
-            flex: 1;
-        }
-
-        .recent-info h4 {
-            font-size: 0.95rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .recent-info p {
-            font-size: 0.8rem;
+        .status-badge.want_to_read {
+            background: rgba(136, 146, 176, 0.2);
             color: #8892b0;
         }
 
-        .recent-progress {
-            font-size: 0.8rem;
-            color: #e94560;
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #1a2744;
+            border-top-color: #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -326,8 +388,8 @@
                 font-size: 1.5rem;
             }
 
-            .favorites-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .books-list {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -351,74 +413,16 @@
                     </svg>
                     <input type="text" placeholder="Search books...">
                 </div>
+                <div class="auth-buttons"></div>
             </div>
         </div>
     </nav>
 
-    <!-- Header Section -->
-    <header class="my-books-header">
-        <div class="container">
-            <h1>My Books</h1>
-            <p>Your personal library and reading progress</p>
-
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-number" id="favorites-count">0</div>
-                    <div class="stat-label">Favorites</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="books-read-count">0</div>
-                    <div class="stat-label">Books Read</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="reading-now-count">0</div>
-                    <div class="stat-label">Reading Now</div>
-                </div>
-            </div>
-
-            <!-- Reading Goal -->
-            <div class="reading-goal-card" id="goal-card">
-                <!-- Populated by JavaScript -->
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="books-section">
-        <div class="container">
-            <div class="section-tabs">
-                <button class="tab-btn active" data-tab="favorites">Favorites</button>
-                <button class="tab-btn" data-tab="recently-read">Recently Read</button>
-            </div>
-
-            <!-- Favorites Tab -->
-            <div class="tab-content" id="favorites-tab">
-                <div class="favorites-grid" id="favorites-grid">
-                    <!-- Populated by JavaScript -->
-                </div>
-                <div class="empty-state" id="empty-favorites" style="display: none;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                    <h3>No favorites yet</h3>
-                    <p>Start adding books to your favorites from the <a href="index.html">library</a>.</p>
-                </div>
-            </div>
-
-            <!-- Recently Read Tab -->
-            <div class="tab-content" id="recently-read-tab" style="display: none;">
-                <div class="recently-read-list" id="recently-read-list">
-                    <!-- Populated by JavaScript -->
-                </div>
-                <div class="empty-state" id="empty-recent" style="display: none;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                    </svg>
-                    <h3>No reading history</h3>
-                    <p>Start reading a book to track your progress.</p>
-                </div>
-            </div>
+    <!-- Main Content - Login Required -->
+    <main id="main-content">
+        <div class="loading-state" id="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading your library...</p>
         </div>
     </main>
 
@@ -429,21 +433,19 @@
         </div>
     </footer>
 
-    <script src="js/app.js"></script>
+    <script src="js/api.js"></script>
     <script>
-        // ========== MY BOOKS PAGE LOGIC ==========
-
-        const { Favorites, ReadingGoals, ReadingProgress } = window.MyWebBooks;
-
-        // Book cover styles mapping
+        // Cover style mapping
         const coverStyles = {
             'pride_and_prejudice': 'pride-prejudice',
+            'moby_dick': 'moby-dick',
             'frankenstein': 'frankenstein',
             'dracula': 'dracula',
-            'great_gatsby': 'gatsby',
-            'alice_in_wonderland': 'alice',
             'sherlock_holmes': 'sherlock',
-            'moby_dick': 'moby-dick',
+            'alice_in_wonderland': 'alice',
+            'great_gatsby': 'gatsby',
+            'dorian_gray': 'dorian-gray',
+            'tale_of_two_cities': 'tale-two-cities',
             'jane_eyre': 'jane-eyre',
             'wuthering_heights': 'wuthering',
             'crime_and_punishment': 'crime',
@@ -451,173 +453,397 @@
             'little_women': 'little-women'
         };
 
-        // ========== TABS ==========
-        function initTabs() {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const favoritesTab = document.getElementById('favorites-tab');
-            const recentTab = document.getElementById('recently-read-tab');
+        // State
+        let libraryData = null;
+        let currentTab = 'reading';
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
+        // Initialize
+        async function init() {
+            AuthUI.init();
 
-                    const tabName = tab.dataset.tab;
-                    if (tabName === 'favorites') {
-                        favoritesTab.style.display = '';
-                        recentTab.style.display = 'none';
-                    } else {
-                        favoritesTab.style.display = 'none';
-                        recentTab.style.display = '';
+            const user = await API.getCurrentUser();
+
+            if (!user) {
+                showLoginRequired();
+                return;
+            }
+
+            await loadLibrary();
+        }
+
+        function showLoginRequired() {
+            document.getElementById('main-content').innerHTML = `
+                <div class="login-required">
+                    <h2>Sign in to access your library</h2>
+                    <p>Track your reading progress, save favorites, and set reading goals.</p>
+                    <a href="login.html?redirect=${encodeURIComponent(window.location.href)}" class="btn-login-big">Log In</a>
+                </div>
+            `;
+        }
+
+        async function loadLibrary() {
+            try {
+                libraryData = await API.getLibrary();
+                renderDashboard();
+            } catch (error) {
+                console.error('Failed to load library:', error);
+                if (error.status === 401) {
+                    showLoginRequired();
+                } else {
+                    document.getElementById('main-content').innerHTML = `
+                        <div class="empty-state">
+                            <h3>Error loading library</h3>
+                            <p>${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function renderDashboard() {
+            const main = document.getElementById('main-content');
+
+            main.innerHTML = `
+                <!-- Header Section -->
+                <header class="my-books-header">
+                    <div class="container">
+                        <h1>My Books</h1>
+                        <p>Your personal library and reading progress</p>
+
+                        <div class="stats-bar">
+                            <div class="stat-item">
+                                <div class="stat-number">${libraryData.stats.favorites}</div>
+                                <div class="stat-label">Favorites</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">${libraryData.stats.finished}</div>
+                                <div class="stat-label">Books Read</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">${libraryData.stats.currentlyReading}</div>
+                                <div class="stat-label">Reading Now</div>
+                            </div>
+                        </div>
+
+                        <!-- Reading Goal -->
+                        <div class="reading-goal-card" id="goal-card">
+                            ${renderGoalCard()}
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Content -->
+                <section class="books-section">
+                    <div class="container">
+                        <div class="section-tabs">
+                            <button class="tab-btn ${currentTab === 'reading' ? 'active' : ''}" data-tab="reading">
+                                Currently Reading (${libraryData.currentlyReading.length})
+                            </button>
+                            <button class="tab-btn ${currentTab === 'favorites' ? 'active' : ''}" data-tab="favorites">
+                                Favorites (${libraryData.favorites.length})
+                            </button>
+                            <button class="tab-btn ${currentTab === 'finished' ? 'active' : ''}" data-tab="finished">
+                                Finished (${libraryData.finished.length})
+                            </button>
+                            <button class="tab-btn ${currentTab === 'want_to_read' ? 'active' : ''}" data-tab="want_to_read">
+                                Want to Read (${libraryData.wantToRead.length})
+                            </button>
+                        </div>
+
+                        <div id="tab-content">
+                            ${renderTabContent()}
+                        </div>
+                    </div>
+                </section>
+            `;
+
+            // Setup tab handlers
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentTab = btn.dataset.tab;
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.getElementById('tab-content').innerHTML = renderTabContent();
+                    attachBookActions();
+                });
+            });
+
+            // Setup goal button
+            document.getElementById('goal-card')?.addEventListener('click', (e) => {
+                if (e.target.classList.contains('set-goal-btn') || e.target.classList.contains('goal-edit-btn')) {
+                    promptForGoal();
+                }
+            });
+
+            attachBookActions();
+        }
+
+        function renderGoalCard() {
+            const goal = libraryData.goal;
+
+            if (goal.target === 0) {
+                return `
+                    <div class="no-goal">
+                        <p>Set a reading goal to track your progress this year</p>
+                        <button class="set-goal-btn">Set Reading Goal</button>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="goal-header">
+                    <h3>${goal.year} Reading Goal</h3>
+                    <button class="goal-edit-btn">Edit</button>
+                </div>
+                <div class="goal-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${goal.progress}%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>${goal.completed} of ${goal.target} books</span>
+                        <span>${goal.progress}%</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTabContent() {
+            switch (currentTab) {
+                case 'reading':
+                    return renderCurrentlyReading();
+                case 'favorites':
+                    return renderFavorites();
+                case 'finished':
+                    return renderFinished();
+                case 'want_to_read':
+                    return renderWantToRead();
+                default:
+                    return '';
+            }
+        }
+
+        function renderCurrentlyReading() {
+            if (libraryData.currentlyReading.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                        <h3>Not reading anything yet</h3>
+                        <p>Browse the <a href="index.html#books">library</a> to find your next book.</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="books-list">
+                    ${libraryData.currentlyReading.map(item => renderBookItem(item, 'reading')).join('')}
+                </div>
+            `;
+        }
+
+        function renderFavorites() {
+            if (libraryData.favorites.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                        <h3>No favorites yet</h3>
+                        <p>Click the heart icon on any book to add it to your favorites.</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="books-list">
+                    ${libraryData.favorites.map(item => renderFavoriteItem(item)).join('')}
+                </div>
+            `;
+        }
+
+        function renderFinished() {
+            if (libraryData.finished.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <h3>No finished books yet</h3>
+                        <p>Mark a book as finished when you complete it.</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="books-list">
+                    ${libraryData.finished.map(item => renderBookItem(item, 'finished')).join('')}
+                </div>
+            `;
+        }
+
+        function renderWantToRead() {
+            if (libraryData.wantToRead.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                        </svg>
+                        <h3>Your reading list is empty</h3>
+                        <p>Browse the <a href="index.html#books">library</a> to add books you want to read.</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="books-list">
+                    ${libraryData.wantToRead.map(item => renderBookItem(item, 'want_to_read')).join('')}
+                </div>
+            `;
+        }
+
+        function renderBookItem(item, type) {
+            const book = item.book;
+            const coverClass = coverStyles[book.slug] || '';
+            const readerUrl = `reader.html?id=${book.id}&slug=${book.slug}&title=${encodeURIComponent(book.title)}`;
+
+            let progressInfo = '';
+            let dateInfo = '';
+            let actionBtn = '';
+
+            if (type === 'reading' && item.progress) {
+                progressInfo = `<div class="progress-info">${item.progress.percentage}% complete</div>`;
+                dateInfo = `<div class="date-info">Last read: ${formatDate(item.progress.lastReadAt)}</div>`;
+                actionBtn = `<a href="${readerUrl}" class="btn-continue">Continue</a>`;
+            } else if (type === 'finished') {
+                dateInfo = `<div class="date-info">Finished: ${formatDate(item.finishedAt)}</div>`;
+                actionBtn = `<a href="${readerUrl}" class="btn-continue">Read Again</a>`;
+            } else if (type === 'want_to_read') {
+                dateInfo = `<div class="date-info">Added: ${formatDate(item.addedAt)}</div>`;
+                actionBtn = `<a href="${readerUrl}" class="btn-continue">Start Reading</a>`;
+            }
+
+            return `
+                <div class="book-list-item" data-book-id="${book.id}" data-item-id="${item.id}">
+                    <div class="book-list-cover book-cover ${coverClass}">
+                        <h4>${book.title}</h4>
+                        <p class="book-author">${book.author}</p>
+                    </div>
+                    <div class="book-list-info">
+                        <div>
+                            <h4>${book.title}</h4>
+                            <p class="author">${book.author}</p>
+                            <span class="status-badge ${item.status}">${formatStatus(item.status)}</span>
+                            ${progressInfo}
+                            ${dateInfo}
+                        </div>
+                        <div class="book-list-actions">
+                            ${actionBtn}
+                            <button class="btn-remove" data-action="remove" data-book-id="${book.id}">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFavoriteItem(item) {
+            const book = item.book;
+            const coverClass = coverStyles[book.slug] || '';
+            const readerUrl = `reader.html?id=${book.id}&slug=${book.slug}&title=${encodeURIComponent(book.title)}`;
+
+            return `
+                <div class="book-list-item" data-book-id="${book.id}">
+                    <div class="book-list-cover book-cover ${coverClass}">
+                        <h4>${book.title}</h4>
+                        <p class="book-author">${book.author}</p>
+                    </div>
+                    <div class="book-list-info">
+                        <div>
+                            <h4>${book.title}</h4>
+                            <p class="author">${book.author}</p>
+                            <div class="date-info">Added: ${formatDate(item.createdAt)}</div>
+                        </div>
+                        <div class="book-list-actions">
+                            <a href="${readerUrl}" class="btn-continue">Read</a>
+                            <button class="btn-remove" data-action="unfavorite" data-book-id="${book.id}">Unfavorite</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function attachBookActions() {
+            document.querySelectorAll('.btn-remove').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const bookId = btn.dataset.bookId;
+                    const action = btn.dataset.action;
+
+                    try {
+                        if (action === 'unfavorite') {
+                            await API.removeFavorite(bookId);
+                        } else {
+                            await API.removeFromLibrary(bookId);
+                        }
+                        await loadLibrary();
+                    } catch (error) {
+                        console.error('Action failed:', error);
                     }
                 });
             });
         }
 
-        // ========== STATS ==========
-        function updateStats() {
-            const favorites = Favorites.getAll();
-            const goal = ReadingGoals.getCurrentGoal();
-            const recentlyRead = ReadingProgress.getRecentlyRead();
+        async function promptForGoal() {
+            const currentTarget = libraryData.goal.target || 12;
+            const input = prompt(
+                `Set your ${new Date().getFullYear()} reading goal.\n\nHow many books do you want to read this year?`,
+                currentTarget
+            );
 
-            document.getElementById('favorites-count').textContent = favorites.length;
-            document.getElementById('books-read-count').textContent = goal.completed;
-            document.getElementById('reading-now-count').textContent = recentlyRead.length;
-        }
+            if (input === null) return;
 
-        // ========== READING GOAL ==========
-        function renderGoalCard() {
-            const goal = ReadingGoals.getCurrentGoal();
-            const goalCard = document.getElementById('goal-card');
+            const target = parseInt(input, 10);
 
-            if (goal.target === 0) {
-                goalCard.innerHTML = `
-                    <div class="no-goal">
-                        <p>Set a reading goal to track your progress this year</p>
-                        <button class="set-goal-btn" onclick="setGoal()">Set Reading Goal</button>
-                    </div>
-                `;
-            } else {
-                const progress = ReadingGoals.getProgress();
-                goalCard.innerHTML = `
-                    <div class="goal-header">
-                        <h3>${goal.year} Reading Goal</h3>
-                        <button class="goal-edit-btn" onclick="setGoal()">Edit</button>
-                    </div>
-                    <div class="goal-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${progress}%"></div>
-                        </div>
-                        <div class="progress-text">
-                            <span>${goal.completed} of ${goal.target} books</span>
-                            <span>${progress}%</span>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function setGoal() {
-            ReadingGoals.promptForGoal();
-            renderGoalCard();
-            updateStats();
-        }
-
-        // ========== FAVORITES GRID ==========
-        function renderFavorites() {
-            const favorites = Favorites.getAll();
-            const grid = document.getElementById('favorites-grid');
-            const emptyState = document.getElementById('empty-favorites');
-
-            if (favorites.length === 0) {
-                grid.style.display = 'none';
-                emptyState.style.display = '';
+            if (isNaN(target) || target < 1 || target > 365) {
+                alert('Please enter a valid number between 1 and 365.');
                 return;
             }
 
-            grid.style.display = '';
-            emptyState.style.display = 'none';
+            try {
+                const result = await API.updateGoal(target);
+                libraryData.goal = result;
+                document.getElementById('goal-card').innerHTML = renderGoalCard();
 
-            grid.innerHTML = favorites.map(book => {
-                const coverClass = book.coverClass || coverStyles[book.id] || '';
-                return `
-                    <div class="favorite-card" data-book-id="${book.id}">
-                        <div class="favorite-cover book-cover ${coverClass}">
-                            <span class="book-year">${book.year || ''}</span>
-                            <h4>${book.title}</h4>
-                            <p class="book-author">${book.author || ''}</p>
-                        </div>
-                        <div class="favorite-actions">
-                            <a href="${book.readerUrl || '#'}" class="btn-read-fav">Read</a>
-                            <button class="btn-remove-fav" onclick="removeFavorite('${book.id}')">Remove</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function removeFavorite(bookId) {
-            Favorites.remove(bookId);
-            renderFavorites();
-            updateStats();
-        }
-
-        // ========== RECENTLY READ ==========
-        function renderRecentlyRead() {
-            const recent = ReadingProgress.getRecentlyRead(10);
-            const list = document.getElementById('recently-read-list');
-            const emptyState = document.getElementById('empty-recent');
-
-            if (recent.length === 0) {
-                list.style.display = 'none';
-                emptyState.style.display = '';
-                return;
+                // Re-attach click handler
+                document.getElementById('goal-card')?.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('set-goal-btn') || e.target.classList.contains('goal-edit-btn')) {
+                        promptForGoal();
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to update goal:', error);
+                alert('Failed to update goal. Please try again.');
             }
-
-            list.style.display = '';
-            emptyState.style.display = 'none';
-
-            list.innerHTML = recent.map(item => {
-                const date = new Date(item.lastRead).toLocaleDateString();
-                const progress = item.totalPages > 0
-                    ? `Page ${item.page} of ${item.totalPages}`
-                    : `Page ${item.page}`;
-
-                // Format the book slug to a title
-                const title = item.slug.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-
-                return `
-                    <div class="recent-item">
-                        <div class="recent-info">
-                            <h4>${title}</h4>
-                            <p>Last read: ${date}</p>
-                        </div>
-                        <div class="recent-progress">${progress}</div>
-                        <a href="reader.html?book=${item.slug}&title=${encodeURIComponent(title)}" class="btn-read-fav">Continue</a>
-                    </div>
-                `;
-            }).join('');
         }
 
-        // ========== INITIALIZE ==========
-        document.addEventListener('DOMContentLoaded', () => {
-            initTabs();
-            updateStats();
-            renderGoalCard();
-            renderFavorites();
-            renderRecentlyRead();
+        function formatDate(dateStr) {
+            if (!dateStr) return 'Unknown';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
 
-            // Listen for changes
-            window.addEventListener('favoritesChanged', () => {
-                renderFavorites();
-                updateStats();
-            });
+        function formatStatus(status) {
+            const labels = {
+                'reading': 'Reading',
+                'finished': 'Finished',
+                'want_to_read': 'Want to Read'
+            };
+            return labels[status] || status;
+        }
 
-            window.addEventListener('readingGoalChanged', () => {
-                renderGoalCard();
-                updateStats();
-            });
-        });
+        // Initialize
+        init();
     </script>
 </body>
 </html>

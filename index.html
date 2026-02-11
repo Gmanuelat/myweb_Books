@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyWeb Books - Free Online Library</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/fonts.css">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -23,9 +25,13 @@
                         <circle cx="11" cy="11" r="8"/>
                         <path d="M21 21l-4.35-4.35"/>
                     </svg>
-                    <input type="text" placeholder="Search books...">
+                    <input type="text" id="search-input" placeholder="Search books...">
                 </div>
-                <button class="btn-signup">Hi</button>
+                <!-- Auth buttons will be inserted here by AuthUI -->
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn-login">Log In</a>
+                    <a href="signup.html" class="btn-signup">Sign Up</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -77,140 +83,16 @@
         </div>
     </section>
 
-    <!-- Trending Books Section -->
+    <!-- Books Grid - Will be populated from API -->
     <section class="books-section" id="books">
         <div class="container">
             <h2>Trending Books</h2>
-            <div class="books-grid">
-                <div class="book-card">
-                    <div class="book-cover pride-prejudice">
-                        <div class="book-cover-content">
-                            <span class="book-year">1813</span>
-                            <h4>Pride and Prejudice</h4>
-                            <p class="book-author">Jane Austen</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=pride_and_prejudice&title=Pride%20and%20Prejudice" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover frankenstein">
-                        <div class="book-cover-content">
-                            <span class="book-year">1818</span>
-                            <h4>Frankenstein</h4>
-                            <p class="book-author">Mary Shelley</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=frankenstein&title=Frankenstein" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover dracula">
-                        <div class="book-cover-content">
-                            <span class="book-year">1897</span>
-                            <h4>Dracula</h4>
-                            <p class="book-author">Bram Stoker</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=dracula&title=Dracula" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover gatsby">
-                        <div class="book-cover-content">
-                            <span class="book-year">1925</span>
-                            <h4>The Great Gatsby</h4>
-                            <p class="book-author">F. Scott Fitzgerald</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=great_gatsby&title=The%20Great%20Gatsby" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover alice">
-                        <div class="book-cover-content">
-                            <span class="book-year">1865</span>
-                            <h4>Alice's Adventures in Wonderland</h4>
-                            <p class="book-author">Lewis Carroll</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=alice_in_wonderland&title=Alice%20in%20Wonderland" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover sherlock">
-                        <div class="book-cover-content">
-                            <span class="book-year">1892</span>
-                            <h4>Sherlock Holmes</h4>
-                            <p class="book-author">Arthur Conan Doyle</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=sherlock_holmes&title=Sherlock%20Holmes" class="btn-read">Read</a>
-                </div>
+            <div class="books-grid" id="books-grid">
+                <!-- Books loaded dynamically -->
             </div>
-        </div>
-    </section>
-
-    <!-- Classic Literature Section -->
-    <section class="books-section">
-        <div class="container">
-            <h2>Classic Literature</h2>
-            <div class="books-grid">
-                <div class="book-card">
-                    <div class="book-cover moby-dick">
-                        <div class="book-cover-content">
-                            <span class="book-year">1851</span>
-                            <h4>Moby-Dick</h4>
-                            <p class="book-author">Herman Melville</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=moby_dick&title=Moby-Dick" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover jane-eyre">
-                        <div class="book-cover-content">
-                            <span class="book-year">1847</span>
-                            <h4>Jane Eyre</h4>
-                            <p class="book-author">Charlotte Bronte</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=jane_eyre&title=Jane%20Eyre" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover wuthering">
-                        <div class="book-cover-content">
-                            <span class="book-year">1847</span>
-                            <h4>Wuthering Heights</h4>
-                            <p class="book-author">Emily Bronte</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=wuthering_heights&title=Wuthering%20Heights" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover crime">
-                        <div class="book-cover-content">
-                            <span class="book-year">1866</span>
-                            <h4>Crime and Punishment</h4>
-                            <p class="book-author">Fyodor Dostoevsky</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=crime_and_punishment&title=Crime%20and%20Punishment" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover war-peace">
-                        <div class="book-cover-content">
-                            <span class="book-year">1869</span>
-                            <h4>War and Peace</h4>
-                            <p class="book-author">Leo Tolstoy</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=war_and_peace&title=War%20and%20Peace" class="btn-read">Read</a>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover little-women">
-                        <div class="book-cover-content">
-                            <span class="book-year">1868</span>
-                            <h4>Little Women</h4>
-                            <p class="book-author">Louisa May Alcott</p>
-                        </div>
-                    </div>
-                    <a href="reader.html?book=little_women&title=Little%20Women" class="btn-read">Read</a>
-                </div>
+            <div class="loading-state" id="books-loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Loading books...</p>
             </div>
         </div>
     </section>
@@ -222,6 +104,157 @@
         </div>
     </footer>
 
+    <script src="js/api.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        // ============================================================
+        // INDEX PAGE - BOOKS LOADING FROM API
+        // ============================================================
+
+        const BooksLoader = {
+            async init() {
+                // Initialize auth UI
+                AuthUI.init();
+
+                // Try to load books from API, fallback to static
+                await this.loadBooks();
+
+                // Setup search
+                this.setupSearch();
+            },
+
+            async loadBooks() {
+                const grid = document.getElementById('books-grid');
+                const loading = document.getElementById('books-loading');
+
+                try {
+                    loading.style.display = 'flex';
+
+                    // Try API first
+                    const data = await API.getBooks({ perPage: 20 });
+                    this.renderBooks(data.books);
+
+                } catch (error) {
+                    console.warn('API not available, using static books');
+                    // Keep existing static books if API fails
+                    this.loadStaticBooks();
+                } finally {
+                    loading.style.display = 'none';
+                }
+            },
+
+            renderBooks(books) {
+                const grid = document.getElementById('books-grid');
+
+                // Cover style mapping
+                const coverStyles = {
+                    'pride_and_prejudice': 'pride-prejudice',
+                    'moby_dick': 'moby-dick',
+                    'frankenstein': 'frankenstein',
+                    'dracula': 'dracula',
+                    'sherlock_holmes': 'sherlock',
+                    'alice_in_wonderland': 'alice',
+                    'great_gatsby': 'gatsby',
+                    'dorian_gray': 'dorian-gray',
+                    'tale_of_two_cities': 'tale-two-cities',
+                    'jane_eyre': 'jane-eyre',
+                    'wuthering_heights': 'wuthering',
+                    'crime_and_punishment': 'crime',
+                    'war_and_peace': 'war-peace',
+                    'little_women': 'little-women',
+                    'tom_sawyer': 'tom-sawyer',
+                    'huckleberry_finn': 'huck-finn',
+                    'treasure_island': 'treasure-island',
+                    'wizard_of_oz': 'wizard-oz',
+                    'jekyll_and_hyde': 'jekyll-hyde',
+                    'count_of_monte_cristo': 'monte-cristo'
+                };
+
+                grid.innerHTML = books.map(book => {
+                    const coverClass = coverStyles[book.slug] || '';
+                    const readerUrl = `reader.html?id=${book.id}&slug=${book.slug}&title=${encodeURIComponent(book.title)}`;
+
+                    return `
+                        <div class="book-card" data-book-id="${book.id}" data-book-slug="${book.slug}">
+                            <div class="book-cover ${coverClass}">
+                                <div class="book-cover-content">
+                                    <span class="book-year">${book.year || ''}</span>
+                                    <h4>${book.title}</h4>
+                                    <p class="book-author">${book.author}</p>
+                                </div>
+                            </div>
+                            <a href="${readerUrl}" class="btn-read" data-book-id="${book.id}">Read</a>
+                        </div>
+                    `;
+                }).join('');
+
+                // Re-initialize book cards with favorite buttons
+                if (typeof BookCards !== 'undefined') {
+                    BookCards.init();
+                }
+            },
+
+            loadStaticBooks() {
+                // Static books data for when API is not available
+                const staticBooks = [
+                    { id: 1, slug: 'pride_and_prejudice', title: 'Pride and Prejudice', author: 'Jane Austen', year: 1813 },
+                    { id: 3, slug: 'frankenstein', title: 'Frankenstein', author: 'Mary Shelley', year: 1818 },
+                    { id: 4, slug: 'dracula', title: 'Dracula', author: 'Bram Stoker', year: 1897 },
+                    { id: 7, slug: 'great_gatsby', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', year: 1925 },
+                    { id: 6, slug: 'alice_in_wonderland', title: "Alice's Adventures in Wonderland", author: 'Lewis Carroll', year: 1865 },
+                    { id: 5, slug: 'sherlock_holmes', title: 'Sherlock Holmes', author: 'Arthur Conan Doyle', year: 1892 },
+                    { id: 2, slug: 'moby_dick', title: 'Moby-Dick', author: 'Herman Melville', year: 1851 },
+                    { id: 10, slug: 'jane_eyre', title: 'Jane Eyre', author: 'Charlotte Bronte', year: 1847 },
+                    { id: 11, slug: 'wuthering_heights', title: 'Wuthering Heights', author: 'Emily Bronte', year: 1847 },
+                    { id: 12, slug: 'crime_and_punishment', title: 'Crime and Punishment', author: 'Fyodor Dostoevsky', year: 1866 },
+                    { id: 15, slug: 'war_and_peace', title: 'War and Peace', author: 'Leo Tolstoy', year: 1869 },
+                    { id: 20, slug: 'little_women', title: 'Little Women', author: 'Louisa May Alcott', year: 1868 },
+                ];
+                this.renderBooks(staticBooks);
+            },
+
+            setupSearch() {
+                const searchInput = document.getElementById('search-input');
+                if (!searchInput) return;
+
+                let debounceTimer;
+
+                searchInput.addEventListener('input', (e) => {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                        this.handleSearch(e.target.value);
+                    }, 300);
+                });
+            },
+
+            async handleSearch(query) {
+                const normalizedQuery = query.toLowerCase().trim();
+
+                if (!normalizedQuery) {
+                    await this.loadBooks();
+                    return;
+                }
+
+                try {
+                    const data = await API.getBooks({ search: normalizedQuery, perPage: 20 });
+                    this.renderBooks(data.books);
+                } catch (error) {
+                    // Fallback to client-side filter
+                    const bookCards = document.querySelectorAll('.book-card');
+                    bookCards.forEach(card => {
+                        const title = card.querySelector('h4')?.textContent.toLowerCase() || '';
+                        const author = card.querySelector('.book-author')?.textContent.toLowerCase() || '';
+                        const matches = title.includes(normalizedQuery) || author.includes(normalizedQuery);
+                        card.style.display = matches ? '' : 'none';
+                    });
+                }
+            }
+        };
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            BooksLoader.init();
+        });
+    </script>
 </body>
 </html>
