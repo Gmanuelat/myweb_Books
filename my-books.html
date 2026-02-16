@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Books - MyWeb Books</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="css/auth.css">
     <link rel="stylesheet" href="css/fonts.css">
@@ -379,6 +381,16 @@
             to { transform: rotate(360deg); }
         }
 
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
         @media (max-width: 768px) {
             .stats-bar {
                 gap: 1.5rem;
@@ -434,6 +446,8 @@
     </footer>
 
     <script src="js/api.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/covers.js"></script>
     <script>
         // Cover style mapping
         const coverStyles = {
@@ -794,37 +808,130 @@
             });
         }
 
-        async function promptForGoal() {
+        function promptForGoal() {
             const currentTarget = libraryData.goal.target || 12;
-            const input = prompt(
-                `Set your ${new Date().getFullYear()} reading goal.\n\nHow many books do you want to read this year?`,
-                currentTarget
-            );
+            const currentYear = new Date().getFullYear();
 
-            if (input === null) return;
+            const content = `
+                <p class="modal-description">
+                    Set your reading goal for ${currentYear}. Challenge yourself to read more books this year!
+                </p>
+                <div class="modal-input-group">
+                    <label class="modal-label" for="goal-input">Number of books</label>
+                    <input
+                        type="number"
+                        id="goal-input"
+                        class="modal-input"
+                        value="${currentTarget}"
+                        min="1"
+                        max="365"
+                        placeholder="12"
+                        autofocus
+                    >
+                    <p class="modal-input-hint">Recommended: 12-24 books per year (1-2 per month)</p>
+                </div>
+                <div class="goal-modal-preview" id="goal-preview">
+                    <span class="goal-modal-preview-icon">📚</span>
+                    <span class="goal-modal-preview-text">
+                        That's about <strong id="books-per-month">${(currentTarget / 12).toFixed(1)}</strong> books per month
+                    </span>
+                </div>
+            `;
 
-            const target = parseInt(input, 10);
+            const modal = Modal.create({
+                title: `${currentYear} Reading Goal`,
+                content,
+                saveText: 'Set Goal',
+                onSave: async () => {
+                    const value = parseInt(document.getElementById('goal-input').value, 10);
 
-            if (isNaN(target) || target < 1 || target > 365) {
-                alert('Please enter a valid number between 1 and 365.');
-                return;
-            }
-
-            try {
-                const result = await API.updateGoal(target);
-                libraryData.goal = result;
-                document.getElementById('goal-card').innerHTML = renderGoalCard();
-
-                // Re-attach click handler
-                document.getElementById('goal-card')?.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('set-goal-btn') || e.target.classList.contains('goal-edit-btn')) {
-                        promptForGoal();
+                    if (isNaN(value) || value < 1 || value > 365) {
+                        const input = document.getElementById('goal-input');
+                        input.style.borderColor = 'var(--error)';
+                        input.focus();
+                        return false; // Prevent modal close
                     }
-                });
-            } catch (error) {
-                console.error('Failed to update goal:', error);
-                alert('Failed to update goal. Please try again.');
-            }
+
+                    try {
+                        const result = await API.updateGoal(value);
+                        libraryData.goal = result;
+                        document.getElementById('goal-card').innerHTML = renderGoalCard();
+
+                        // Re-attach click handler
+                        document.getElementById('goal-card')?.addEventListener('click', (e) => {
+                            if (e.target.classList.contains('set-goal-btn') || e.target.classList.contains('goal-edit-btn')) {
+                                promptForGoal();
+                            }
+                        });
+
+                        // Show success toast
+                        showToast(`Goal set to ${value} books!`, 'success');
+                        return true;
+                    } catch (error) {
+                        console.error('Failed to update goal:', error);
+                        showToast('Failed to update goal. Please try again.', 'error');
+                        return false;
+                    }
+                }
+            });
+
+            // Update preview on input
+            const input = document.getElementById('goal-input');
+            const preview = document.getElementById('books-per-month');
+
+            const updatePreview = () => {
+                const value = parseInt(input.value, 10) || 0;
+                preview.textContent = (value / 12).toFixed(1);
+                input.style.borderColor = '';
+            };
+
+            input.addEventListener('input', updatePreview);
+
+            // Enter key submits
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('modal-save').click();
+                }
+            });
+        }
+
+        // Toast notification helper
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+
+            const icon = type === 'success' ? '✓' : '✕';
+            const bgColor = type === 'success' ? 'var(--success, #2ed573)' : 'var(--error, #ff4757)';
+
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+            `;
+
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 24px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${bgColor};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                z-index: 1100;
+                animation: slideUp 0.3s ease;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            `;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
         function formatDate(dateStr) {

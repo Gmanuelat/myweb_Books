@@ -4,8 +4,8 @@
  */
 
 const API = {
-    // Base URL - change this based on environment
-    BASE_URL: 'http://localhost:5001/api',
+    // Base URL - dynamically set based on current origin
+    BASE_URL: window.location.origin + '/api',
 
     // Current user cache
     _currentUser: null,

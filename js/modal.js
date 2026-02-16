@@ -77,11 +77,16 @@ const Modal = {
             });
         }
 
-        modal.querySelector('#modal-save').addEventListener('click', () => {
+        modal.querySelector('#modal-save').addEventListener('click', async () => {
             if (onSave) {
-                const result = onSave();
-                if (result !== false) {
-                    this.close();
+                // Support both sync and async onSave callbacks
+                try {
+                    const result = await Promise.resolve(onSave());
+                    if (result !== false) {
+                        this.close();
+                    }
+                } catch (e) {
+                    console.error('Modal save error:', e);
                 }
             } else {
                 this.close();

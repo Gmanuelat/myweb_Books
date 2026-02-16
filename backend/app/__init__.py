@@ -2,13 +2,16 @@
 Flask application factory
 """
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_cors import CORS
 from flask_migrate import Migrate
 
 from config import config
+
+# Path to frontend files (parent directory of backend)
+FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -54,5 +57,22 @@ def create_app(config_name=None):
     @app.route('/api/health')
     def health_check():
         return {'status': 'ok'}
+
+    # Static file serving for frontend
+    @app.route('/')
+    def serve_index():
+        return send_from_directory(FRONTEND_DIR, 'index.html')
+
+    @app.route('/<path:filename>')
+    def serve_static(filename):
+        # Try to serve the file directly
+        file_path = os.path.join(FRONTEND_DIR, filename)
+        if os.path.isfile(file_path):
+            return send_from_directory(FRONTEND_DIR, filename)
+        # For SPA-style navigation, serve index.html for HTML pages
+        if filename.endswith('.html'):
+            return send_from_directory(FRONTEND_DIR, filename)
+        # Fallback to index.html for client-side routing
+        return send_from_directory(FRONTEND_DIR, 'index.html')
 
     return app

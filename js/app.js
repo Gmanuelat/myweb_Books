@@ -375,7 +375,12 @@ const FeatureCards = {
                 this.navigateToBrowse();
                 break;
             case 1: // "Set a Yearly Reading Goal"
-                ReadingGoals.promptForGoal();
+                // Use GoalModal if available, otherwise fallback
+                if (window.GoalModal) {
+                    GoalModal.open();
+                } else {
+                    ReadingGoals.promptForGoal();
+                }
                 break;
             case 2: // "Keep Track of your Favorite Books"
                 this.navigateToMyBooks();

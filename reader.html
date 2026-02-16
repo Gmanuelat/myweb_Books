@@ -39,7 +39,7 @@
            ============================================ */
         .reader-toolbar {
             height: var(--toolbar-height);
-            background: #000;
+            background: linear-gradient(180deg, #000000 0%, #0a0a12 100%);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -91,6 +91,35 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        /* Content Mode Badge */
+        .content-mode-badge {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            padding: var(--space-1) var(--space-2);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .content-mode-badge.image-mode {
+            background: var(--info-muted);
+            color: var(--info);
+        }
+
+        .content-mode-badge.text-mode {
+            background: var(--success-muted);
+            color: var(--success);
+        }
+
+        .content-mode-badge svg {
+            width: 12px;
+            height: 12px;
         }
 
         /* Toolbar Buttons */
@@ -161,29 +190,118 @@
             display: flex;
             position: relative;
             overflow: hidden;
+            background: var(--bg-primary);
         }
 
         /* ============================================
-           EPUB VIEWER
+           EPUB VIEWER - DUAL MODE
            ============================================ */
         #epub-viewer {
             flex: 1;
             height: 100%;
-            background: var(--reader-bg, #fff);
             overflow: hidden;
+            position: relative;
+            background: var(--reader-bg, #fff);
+            transition: background var(--transition-base);
+        }
+
+        /* Image Mode Container */
+        .image-viewer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            padding: var(--space-4);
+        }
+
+        .image-viewer img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Text Mode Container */
+        .text-viewer {
+            position: absolute;
+            inset: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: var(--reader-bg, #fff);
+        }
+
+        .text-viewer-content {
+            max-width: var(--reader-max-width);
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6);
+            color: var(--reader-text, #1a1a1a);
+            font-family: var(--reader-font, 'Merriweather'), Georgia, serif;
+            font-size: var(--reader-font-size, 18px);
+            line-height: var(--reader-line-height, 1.8);
+        }
+
+        .text-viewer-content h1,
+        .text-viewer-content h2,
+        .text-viewer-content h3,
+        .text-viewer-content h4 {
+            font-family: var(--font-display);
+            margin: 1.5em 0 0.75em;
+            line-height: 1.3;
+        }
+
+        .text-viewer-content p {
+            margin-bottom: 1.2em;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .text-viewer-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 2em auto;
+            border-radius: var(--radius-sm);
+        }
+
+        .text-viewer-content a {
+            color: var(--reader-link, #0066cc);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .text-viewer-content blockquote {
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 1.5em;
+            margin: 1.5em 0;
+            font-style: italic;
+            color: var(--reader-text-muted);
         }
 
         /* Apply reader theme */
-        [data-theme="light"] #epub-viewer {
+        [data-reader-theme="light"] #epub-viewer,
+        [data-reader-theme="light"] .text-viewer {
             background: #ffffff;
         }
 
-        [data-theme="sepia"] #epub-viewer {
-            background: #f4ecd8;
+        [data-reader-theme="sepia"] #epub-viewer,
+        [data-reader-theme="sepia"] .text-viewer {
+            background: #f8f4e8;
         }
 
-        [data-theme="dark"] #epub-viewer {
+        [data-reader-theme="dark"] #epub-viewer,
+        [data-reader-theme="dark"] .text-viewer {
             background: #1a1a2e;
+        }
+
+        [data-reader-theme="dark"] .text-viewer-content {
+            color: #e8e8e8;
+        }
+
+        [data-reader-theme="sepia"] .text-viewer-content {
+            color: #5b4636;
         }
 
         /* ============================================
@@ -282,6 +400,17 @@
             color: var(--text-primary);
         }
 
+        /* Font Preview */
+        .font-preview {
+            margin-top: var(--space-2);
+            padding: var(--space-3);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
         /* Slider Control */
         .slider-control {
             display: flex;
@@ -369,7 +498,7 @@
         }
 
         .theme-btn.theme-sepia {
-            background: #f4ecd8;
+            background: #f8f4e8;
             color: #5b4636;
         }
 
@@ -380,6 +509,13 @@
 
         .theme-btn.active {
             border-color: var(--accent-primary);
+        }
+
+        /* Settings Divider */
+        .settings-divider {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: var(--space-6) 0;
         }
 
         /* ============================================
@@ -492,7 +628,8 @@
             }
 
             .book-title,
-            .back-link span {
+            .back-link span,
+            .content-mode-badge {
                 display: none;
             }
 
@@ -519,6 +656,10 @@
                 border-radius: 0;
                 justify-content: center;
             }
+
+            .text-viewer-content {
+                padding: var(--space-4);
+            }
         }
 
         /* ============================================
@@ -538,7 +679,7 @@
         }
     </style>
 </head>
-<body data-theme="light">
+<body data-reader-theme="light">
     <!-- Toolbar -->
     <nav class="reader-toolbar">
         <div class="toolbar-section">
@@ -549,6 +690,12 @@
                 <span>Library</span>
             </a>
             <span class="book-title" id="book-title">Loading...</span>
+            <span class="content-mode-badge text-mode" id="content-mode-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
+                </svg>
+                <span id="mode-text">Text</span>
+            </span>
         </div>
 
         <div class="toolbar-section toolbar-center">
@@ -609,14 +756,18 @@
         <div class="settings-section">
             <label class="settings-label">Font Family</label>
             <select class="font-select" id="font-family">
-                <option value="Merriweather">Merriweather</option>
-                <option value="Libre Baskerville">Libre Baskerville</option>
-                <option value="Spectral">Spectral</option>
-                <option value="Lora">Lora</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Inter">Inter (Sans)</option>
+                <option value="Merriweather">Merriweather (Serif)</option>
+                <option value="Libre Baskerville">Libre Baskerville (Serif)</option>
+                <option value="Spectral">Spectral (Serif)</option>
+                <option value="Lora">Lora (Serif)</option>
+                <option value="Crimson Pro">Crimson Pro (Serif)</option>
+                <option value="Georgia">Georgia (System)</option>
+                <option value="Inter">Inter (Sans-serif)</option>
                 <option value="system-ui">System Default</option>
             </select>
+            <div class="font-preview" id="font-preview">
+                The quick brown fox jumps over the lazy dog.
+            </div>
         </div>
 
         <!-- Font Size -->
@@ -634,14 +785,16 @@
             <label class="settings-label">Line Height</label>
             <div class="slider-control">
                 <input type="range" class="slider-range" id="line-height"
-                       min="1.2" max="2.2" step="0.1" value="1.6">
-                <span class="slider-value" id="line-height-value">1.6</span>
+                       min="1.2" max="2.4" step="0.1" value="1.8">
+                <span class="slider-value" id="line-height-value">1.8</span>
             </div>
         </div>
 
+        <div class="settings-divider"></div>
+
         <!-- Theme -->
         <div class="settings-section">
-            <label class="settings-label">Theme</label>
+            <label class="settings-label">Reader Theme</label>
             <div class="theme-buttons">
                 <button class="theme-btn theme-light active" data-theme="light">Light</button>
                 <button class="theme-btn theme-sepia" data-theme="sepia">Sepia</button>
@@ -664,7 +817,8 @@
     <script src="js/api.js"></script>
     <script>
     // ============================================
-    // READER APPLICATION
+    // ENHANCED READER APPLICATION
+    // With Image/Text Mode Detection
     // ============================================
 
     const Reader = {
@@ -676,12 +830,13 @@
         bookTitle: '',
         isLoggedIn: false,
         currentLocation: null,
+        currentContentMode: 'text', // 'text' or 'image'
 
-        // Settings
+        // Settings with defaults
         settings: {
             fontFamily: 'Merriweather',
             fontSize: 18,
-            lineHeight: 1.6,
+            lineHeight: 1.8,
             theme: 'light'
         },
 
@@ -703,6 +858,7 @@
             }
 
             this.setupEventListeners();
+            this.applySettingsToUI();
             await this.checkAuth();
             await this.loadBook();
         },
@@ -722,11 +878,14 @@
                 favoriteBtn: document.getElementById('favorite-btn'),
                 loginPrompt: document.getElementById('login-prompt'),
                 fontFamily: document.getElementById('font-family'),
+                fontPreview: document.getElementById('font-preview'),
                 fontDecrease: document.getElementById('font-decrease'),
                 fontIncrease: document.getElementById('font-increase'),
                 fontSizeValue: document.getElementById('font-size-value'),
                 lineHeight: document.getElementById('line-height'),
-                lineHeightValue: document.getElementById('line-height-value')
+                lineHeightValue: document.getElementById('line-height-value'),
+                contentModeBadge: document.getElementById('content-mode-badge'),
+                modeText: document.getElementById('mode-text')
             };
         },
 
@@ -741,7 +900,7 @@
         },
 
         // ============================================
-        // SETTINGS
+        // SETTINGS MANAGEMENT
         // ============================================
 
         loadSettings() {
@@ -750,73 +909,192 @@
                 if (saved) {
                     this.settings = { ...this.settings, ...JSON.parse(saved) };
                 }
-            } catch (e) {}
-
-            // Apply to UI
-            this.elements.fontFamily.value = this.settings.fontFamily;
-            this.elements.fontSizeValue.textContent = `${this.settings.fontSize}px`;
-            this.elements.lineHeight.value = this.settings.lineHeight;
-            this.elements.lineHeightValue.textContent = this.settings.lineHeight;
-
-            // Apply theme
-            document.body.dataset.theme = this.settings.theme;
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.theme === this.settings.theme);
-            });
-        },
-
-        saveSettings() {
-            localStorage.setItem('myweb_reader_settings', JSON.stringify(this.settings));
-
-            // Also save to API if logged in
-            if (this.isLoggedIn && window.API) {
-                API.updateProfile({
-                    preferences: { readerSettings: this.settings }
-                }).catch(() => {});
+            } catch (e) {
+                console.warn('Failed to load settings:', e);
             }
         },
 
-        applySettings() {
+        saveSettings() {
+            try {
+                localStorage.setItem('myweb_reader_settings', JSON.stringify(this.settings));
+
+                // Also save to API if logged in
+                if (this.isLoggedIn && window.API) {
+                    API.updateProfile({
+                        preferences: { readerSettings: this.settings }
+                    }).catch(() => {});
+                }
+            } catch (e) {
+                console.warn('Failed to save settings:', e);
+            }
+        },
+
+        applySettingsToUI() {
+            // Font family
+            this.elements.fontFamily.value = this.settings.fontFamily;
+            this.updateFontPreview();
+
+            // Font size
+            this.elements.fontSizeValue.textContent = `${this.settings.fontSize}px`;
+
+            // Line height
+            this.elements.lineHeight.value = this.settings.lineHeight;
+            this.elements.lineHeightValue.textContent = this.settings.lineHeight.toFixed(1);
+
+            // Theme
+            document.body.dataset.readerTheme = this.settings.theme;
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === this.settings.theme);
+            });
+
+            // Apply CSS variables for text viewer
+            document.documentElement.style.setProperty('--reader-font', `"${this.settings.fontFamily}"`);
+            document.documentElement.style.setProperty('--reader-font-size', `${this.settings.fontSize}px`);
+            document.documentElement.style.setProperty('--reader-line-height', this.settings.lineHeight);
+        },
+
+        updateFontPreview() {
+            if (this.elements.fontPreview) {
+                this.elements.fontPreview.style.fontFamily = `"${this.settings.fontFamily}", Georgia, serif`;
+            }
+        },
+
+        applySettingsToRendition() {
             if (!this.rendition) return;
 
             const themes = this.rendition.themes;
 
-            // Register custom theme with all settings
+            // Theme colors
             const themeColors = {
-                light: { bg: '#ffffff', text: '#1a1a1a' },
-                sepia: { bg: '#f4ecd8', text: '#5b4636' },
-                dark: { bg: '#1a1a2e', text: '#e0e0e0' }
+                light: { bg: '#ffffff', text: '#1a1a1a', link: '#0066cc' },
+                sepia: { bg: '#f8f4e8', text: '#5b4636', link: '#8b4513' },
+                dark: { bg: '#1a1a2e', text: '#e8e8e8', link: '#6bb3ff' }
             };
 
             const colors = themeColors[this.settings.theme];
 
+            // Register comprehensive custom theme
             themes.register('custom', {
-                body: {
+                'body': {
                     'font-family': `"${this.settings.fontFamily}", Georgia, serif !important`,
                     'font-size': `${this.settings.fontSize}px !important`,
                     'line-height': `${this.settings.lineHeight} !important`,
                     'background': `${colors.bg} !important`,
                     'color': `${colors.text} !important`,
-                    'padding': '20px 40px !important',
+                    'padding': '32px 48px !important',
                     'max-width': '800px !important',
-                    'margin': '0 auto !important'
+                    'margin': '0 auto !important',
+                    'text-align': 'justify',
+                    'hyphens': 'auto'
                 },
-                'p, div, span': {
+                'p, div, span, li': {
                     'font-family': `"${this.settings.fontFamily}", Georgia, serif !important`,
-                    'line-height': `${this.settings.lineHeight} !important`
+                    'line-height': `${this.settings.lineHeight} !important`,
+                    'color': `${colors.text} !important`
+                },
+                'h1, h2, h3, h4, h5, h6': {
+                    'font-family': `"${this.settings.fontFamily}", Georgia, serif !important`,
+                    'color': `${colors.text} !important`,
+                    'margin': '1.5em 0 0.75em !important'
+                },
+                'a': {
+                    'color': `${colors.link} !important`
                 },
                 'img': {
                     'max-width': '100% !important',
                     'height': 'auto !important',
                     'display': 'block !important',
-                    'margin': '0 auto !important'
+                    'margin': '1em auto !important'
+                },
+                'blockquote': {
+                    'border-left': '3px solid #e94560 !important',
+                    'padding-left': '1.5em !important',
+                    'margin': '1.5em 0 !important',
+                    'font-style': 'italic !important'
                 }
             });
 
             themes.select('custom');
 
-            // Update body theme
-            document.body.dataset.theme = this.settings.theme;
+            // Update body theme attribute
+            document.body.dataset.readerTheme = this.settings.theme;
+
+            // Update CSS variables
+            document.documentElement.style.setProperty('--reader-font', `"${this.settings.fontFamily}"`);
+            document.documentElement.style.setProperty('--reader-font-size', `${this.settings.fontSize}px`);
+            document.documentElement.style.setProperty('--reader-line-height', this.settings.lineHeight);
+        },
+
+        // ============================================
+        // CONTENT MODE DETECTION
+        // ============================================
+
+        detectContentMode(contents) {
+            if (!contents) return 'text';
+
+            try {
+                const doc = contents.document;
+                if (!doc) return 'text';
+
+                const body = doc.body;
+                if (!body) return 'text';
+
+                // Check if the content is primarily an image
+                const images = body.querySelectorAll('img');
+                const text = body.textContent.trim();
+
+                // If there's a large image and very little text, it's image mode
+                if (images.length > 0) {
+                    const mainImage = images[0];
+                    const imgWidth = mainImage.naturalWidth || mainImage.width || 0;
+                    const imgHeight = mainImage.naturalHeight || mainImage.height || 0;
+
+                    // Check if image is large (likely a full page image)
+                    const isLargeImage = imgWidth > 400 || imgHeight > 400;
+                    const hasMinimalText = text.length < 100;
+
+                    if (isLargeImage && hasMinimalText) {
+                        return 'image';
+                    }
+
+                    // Check image to text ratio
+                    const imageArea = imgWidth * imgHeight;
+                    if (imageArea > 200000 && text.length < 200) {
+                        return 'image';
+                    }
+                }
+
+                // Check for cover pages or title pages
+                const isCover = body.innerHTML.toLowerCase().includes('cover') ||
+                               body.innerHTML.toLowerCase().includes('title-page');
+
+                if (isCover && images.length > 0 && text.length < 150) {
+                    return 'image';
+                }
+
+                return 'text';
+            } catch (e) {
+                console.warn('Content detection error:', e);
+                return 'text';
+            }
+        },
+
+        updateContentModeBadge(mode) {
+            this.currentContentMode = mode;
+            const badge = this.elements.contentModeBadge;
+            const modeText = this.elements.modeText;
+
+            if (mode === 'image') {
+                badge.classList.remove('text-mode');
+                badge.classList.add('image-mode');
+                modeText.textContent = 'Image';
+                badge.querySelector('svg').innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>';
+            } else {
+                badge.classList.remove('image-mode');
+                badge.classList.add('text-mode');
+                modeText.textContent = 'Text';
+                badge.querySelector('svg').innerHTML = '<path d="M4 7V4h16v3M9 20h6M12 4v16"/>';
+            }
         },
 
         // ============================================
@@ -851,17 +1129,18 @@
                 // Create book
                 this.book = ePub(epubPath);
 
-                // Create rendition
+                // Create rendition with better defaults
                 this.rendition = this.book.renderTo(this.elements.viewer, {
                     width: '100%',
                     height: '100%',
                     spread: 'none',
                     flow: 'paginated',
-                    manager: 'continuous'
+                    manager: 'continuous',
+                    allowScriptedContent: false
                 });
 
                 // Apply settings before displaying
-                this.applySettings();
+                this.applySettingsToRendition();
 
                 // Get saved position
                 let startLocation = null;
@@ -894,16 +1173,23 @@
                     this.updateProgress();
                 });
 
-                // Location change handler
+                // Location change handler - detect content mode on each page
                 this.rendition.on('relocated', (location) => {
                     this.currentLocation = location;
                     this.updateProgress();
                     this.saveProgress();
                 });
 
-                // Re-apply settings after each render
-                this.rendition.on('rendered', () => {
-                    this.applySettings();
+                // Rendered handler - detect content type and apply settings
+                this.rendition.on('rendered', (section, view) => {
+                    // Re-apply settings on each render
+                    this.applySettingsToRendition();
+
+                    // Detect content mode
+                    if (view && view.contents) {
+                        const mode = this.detectContentMode(view.contents);
+                        this.updateContentModeBadge(mode);
+                    }
                 });
 
                 // Check favorite status
@@ -1106,25 +1392,30 @@
             // Font family
             this.elements.fontFamily.addEventListener('change', (e) => {
                 this.settings.fontFamily = e.target.value;
-                this.applySettings();
+                this.updateFontPreview();
+                this.applySettingsToRendition();
+                this.applySettingsToUI();
                 this.saveSettings();
             });
 
-            // Font size
+            // Font size decrease
             this.elements.fontDecrease.addEventListener('click', () => {
                 if (this.settings.fontSize > 12) {
                     this.settings.fontSize -= 2;
                     this.elements.fontSizeValue.textContent = `${this.settings.fontSize}px`;
-                    this.applySettings();
+                    this.applySettingsToRendition();
+                    this.applySettingsToUI();
                     this.saveSettings();
                 }
             });
 
+            // Font size increase
             this.elements.fontIncrease.addEventListener('click', () => {
-                if (this.settings.fontSize < 32) {
+                if (this.settings.fontSize < 36) {
                     this.settings.fontSize += 2;
                     this.elements.fontSizeValue.textContent = `${this.settings.fontSize}px`;
-                    this.applySettings();
+                    this.applySettingsToRendition();
+                    this.applySettingsToUI();
                     this.saveSettings();
                 }
             });
@@ -1133,7 +1424,8 @@
             this.elements.lineHeight.addEventListener('input', (e) => {
                 this.settings.lineHeight = parseFloat(e.target.value);
                 this.elements.lineHeightValue.textContent = this.settings.lineHeight.toFixed(1);
-                this.applySettings();
+                this.applySettingsToRendition();
+                this.applySettingsToUI();
                 this.saveSettings();
             });
 
@@ -1143,7 +1435,8 @@
                     document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     this.settings.theme = btn.dataset.theme;
-                    this.applySettings();
+                    this.applySettingsToRendition();
+                    this.applySettingsToUI();
                     this.saveSettings();
                 });
             });
